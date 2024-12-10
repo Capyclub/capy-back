@@ -11,6 +11,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "watchFile": "fixedPollingInterval",
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
