@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { parse } from 'date-fns';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,14 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    console.log(createUserDto);
+    if (typeof createUserDto.date_of_birth === 'string') {
+      createUserDto.date_of_birth = parse(
+        createUserDto.date_of_birth,
+        'dd-MM-yyyy',
+        new Date(),
+      );
+    }
     const newUser = new this.userModel(createUserDto);
     return newUser.save();
   }
