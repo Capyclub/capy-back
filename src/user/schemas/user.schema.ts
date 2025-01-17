@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { IsDate, IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
 
 @Schema()
 export class User extends Document {
@@ -18,6 +20,9 @@ export class User extends Document {
   @Prop({ required: true })
   postal_code: number;
 
+  @IsNotEmpty()
+  @Type(() => Date)
+  @IsDate()
   @Prop({ required: true })
   date_of_birth: Date;
 }
