@@ -10,7 +10,12 @@ import {
   Req,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -22,6 +27,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({ status: 200, description: 'Users retrieved successfully' })
   findAll() {
@@ -29,6 +36,8 @@ export class UserController {
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Retrieve  a single user by ID' })
   @ApiResponse({ status: 200, description: 'User retrieved successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
@@ -44,8 +53,10 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Update an existing user' })
-  @ApiResponse({ status: 200, description: 'User updated successfully' })
+  @ApiResponse({ status: 200, description: 'User  updated successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(id, updateUserDto);
@@ -53,6 +64,8 @@ export class UserController {
 
   @Delete(':id')
   @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiBearerAuth()
   async delete(@Param('id') id: string, @Req() req) {
     if (!req.user || !req.user.isAdmin) {
       throw new UnauthorizedException('Only admins can delete users');

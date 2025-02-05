@@ -1,11 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsBoolean,
+  IsDate,
   IsInt,
   IsOptional,
   IsString,
+  MinDate,
   MinLength,
 } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'john', description: 'The username of the user' })
@@ -45,8 +48,12 @@ export class CreateUserDto {
   postal_code: number;
 
   @ApiProperty({ example: '2002-05-22', description: 'Date of birth' })
-  @IsString()
-  date_of_birth: string;
+  @Transform(({ value }) => new Date(value))
+  @IsDate({ message: 'Invalid date format' })
+  @MinDate(new Date(new Date().setFullYear(new Date().getFullYear() - 18)), {
+    message: 'You must be at least 18 years old',
+  })
+  date_of_birth: Date;
 
   @ApiProperty({
     example: false,

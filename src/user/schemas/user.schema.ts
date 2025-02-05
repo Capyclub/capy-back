@@ -4,10 +4,10 @@ import * as bcrypt from 'bcryptjs';
 
 @Schema()
 export class User extends Document {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   first_name: string;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   last_name: string;
 
   @Prop({ required: true, unique: true })

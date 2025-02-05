@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
@@ -10,7 +14,11 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findAll(): Promise<User[]> {
-    return this.userModel.find().exec();
+    const users = await this.userModel
+      .find()
+      .select('-email -date_of_birth')
+      .exec();
+    return users;
   }
 
   async findOne(id: string): Promise<User> {
@@ -22,6 +30,13 @@ export class UserService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    const birthDate = new Date(createUserDto.date_of_birth);
+    const age = new Date().getFullYear() - birthDate.getFullYear();
+
+    if (age < 18) {
+      throw new BadRequestException('You must be at least 18 years old');
+    }
+
     const newUser = new this.userModel(createUserDto);
     return newUser.save();
   }
