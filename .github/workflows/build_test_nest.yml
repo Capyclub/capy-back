@@ -7,7 +7,7 @@ env:
 on:
   push:
     branches: [ main ]
-  pull_request : [ main ]
+    pull_request : [ main ]
 
 
 jobs:
@@ -17,6 +17,9 @@ jobs:
       pull-requests: write
 
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x]
     services:
       mongodb:
         image: mongo:6
