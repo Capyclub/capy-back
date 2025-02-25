@@ -16,7 +16,6 @@ export class UserService {
   async findAll(): Promise<User[]> {
     const users = await this.userModel
       .find()
-      .select('-email -date_of_birth')
       .exec();
     return users;
   }

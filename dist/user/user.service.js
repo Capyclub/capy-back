@@ -24,7 +24,6 @@ let UserService = class UserService {
     async findAll() {
         const users = await this.userModel
             .find()
-            .select('-email -date_of_birth')
             .exec();
         return users;
     }
