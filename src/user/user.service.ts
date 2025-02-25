@@ -38,9 +38,7 @@ export class UserService {
     }
 
     // Set a default password if not provided (in the case of a noun admin user)
-    const defaultPassword = 'defaultPassword123';
-    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
-    createUserDto.password = hashedPassword;
+    createUserDto.password = 'defaultPassword123';
 
     const newUser = new this.userModel(createUserDto);
     return newUser.save();
