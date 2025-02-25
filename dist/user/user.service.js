@@ -17,6 +17,7 @@ const common_1 = require("@nestjs/common");
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const user_schema_1 = require("./schemas/user.schema");
+const bcrypt = require("bcryptjs");
 let UserService = class UserService {
     constructor(userModel) {
         this.userModel = userModel;
@@ -40,6 +41,9 @@ let UserService = class UserService {
         if (age < 18) {
             throw new common_1.BadRequestException('You must be at least 18 years old');
         }
+        const defaultPassword = 'defaultPassword123';
+        const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+        createUserDto.password = hashedPassword;
         const newUser = new this.userModel(createUserDto);
         return newUser.save();
     }

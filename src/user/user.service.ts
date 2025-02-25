@@ -8,6 +8,7 @@ import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
@@ -35,6 +36,11 @@ export class UserService {
     if (age < 18) {
       throw new BadRequestException('You must be at least 18 years old');
     }
+
+    // Set a default password if not provided (in the case of a noun admin user)
+    const defaultPassword = 'defaultPassword123';
+    const hashedPassword = await bcrypt.hash(defaultPassword, 10);
+    createUserDto.password = hashedPassword;
 
     const newUser = new this.userModel(createUserDto);
     return newUser.save();

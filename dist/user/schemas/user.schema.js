@@ -41,7 +41,7 @@ __decorate([
     __metadata("design:type", Date)
 ], User.prototype, "date_of_birth", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], User.prototype, "password", void 0);
 __decorate([

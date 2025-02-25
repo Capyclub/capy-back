@@ -22,7 +22,7 @@ export class User extends Document {
   @Prop({ required: true })
   date_of_birth: Date;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   password: string;
 
   @Prop({ default: false })
