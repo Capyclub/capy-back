@@ -29,6 +29,13 @@ let UserController = class UserController {
     findOne(id) {
         return this.userService.findOne(id);
     }
+    async findEmail(email) {
+        if (!email) {
+            throw new common_1.NotFoundException('Email is required');
+        }
+        console.log(`Received email: ${email}`);
+        return this.userService.findEmail(email);
+    }
     create(createUserDto) {
         return this.userService.create(createUserDto);
     }
@@ -65,6 +72,18 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UserController.prototype, "findOne", null);
+__decorate([
+    (0, common_1.Get)('email/:email'),
+    (0, common_1.UseGuards)(auth_guard_1.AuthGuard),
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, swagger_1.ApiOperation)({ summary: 'Retrieve a single user by email' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'User retrieved successfully' }),
+    (0, swagger_1.ApiResponse)({ status: 404, description: 'User not found' }),
+    __param(0, (0, common_1.Param)('email')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "findEmail", null);
 __decorate([
     (0, common_1.Post)(),
     (0, swagger_1.ApiOperation)({ summary: 'Create a new user' }),

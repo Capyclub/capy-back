@@ -8,7 +8,7 @@ import { Model } from 'mongoose';
 import { User } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import * as bcrypt from 'bcryptjs';
+
 
 @Injectable()
 export class UserService {
@@ -26,6 +26,20 @@ export class UserService {
     if (!user) {
       throw new NotFoundException(`User with ID "${id}" not found`);
     }
+    return user;
+  }
+
+  async findEmail(email: string): Promise<User> {
+    console.log(`Searching for user with email: ${email}`);
+
+    const user = await this.userModel.findOne({ email: email }).exec();
+
+    if (!user) {
+      console.log(`No user found with email: ${email}`);
+      throw new NotFoundException('User not found');
+    }
+
+    console.log(`User found: ${JSON.stringify(user)}`);
     return user;
   }
 
