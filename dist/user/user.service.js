@@ -34,6 +34,16 @@ let UserService = class UserService {
         }
         return user;
     }
+    async findEmail(email) {
+        console.log(`Searching for user with email: ${email}`);
+        const user = await this.userModel.findOne({ email: email }).exec();
+        if (!user) {
+            console.log(`No user found with email: ${email}`);
+            throw new common_1.NotFoundException('User not found');
+        }
+        console.log(`User found: ${JSON.stringify(user)}`);
+        return user;
+    }
     async create(createUserDto) {
         const birthDate = new Date(createUserDto.date_of_birth);
         const age = new Date().getFullYear() - birthDate.getFullYear();

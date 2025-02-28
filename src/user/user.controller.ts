@@ -8,7 +8,7 @@ import {
   Param,
   UseGuards,
   Req,
-  UnauthorizedException,
+  UnauthorizedException, NotFoundException,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -20,6 +20,7 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '../auth/auth.guard';
+import {User} from "./schemas/user.schema";
 
 @ApiTags('Users')
 @Controller('users')
@@ -43,6 +44,20 @@ export class UserController {
   @ApiResponse({ status: 404, description: 'User not found' })
   findOne(@Param('id') id: string) {
     return this.userService.findOne(id);
+  }
+
+  @Get('email/:email')
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Retrieve a single user by email' })
+  @ApiResponse({ status: 200, description: 'User retrieved successfully' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  async findEmail(@Param('email') email: string): Promise<User> {
+    if (!email) {
+      throw new NotFoundException('Email is required');
+    }
+    console.log(`Received email: ${email}`);
+    return this.userService.findEmail(email);
   }
 
   @Post()
